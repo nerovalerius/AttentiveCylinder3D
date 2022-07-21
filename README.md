@@ -3,40 +3,56 @@
 
 ## Installation
 
-### Requirements
 ### pull repo
 ```
 git clone https://github.com/xinge008/Cylinder3D.git
 ```
 
-### create environment
+### install anaconda
+```
+wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Linux-x86_64.sh
+sh ./Miniconda3-py39_4.12.0-Linux-x86_64.sh
+```
+
+### activate conda
+Either restart terminal or do:
+```source ~/.bashrc```
+
+### create conda environment
 ```
 conda create -n attentive_cylinder_3d
 conda activate attentive_cylinder_3d
-pip install tqdm pyyaml numba spconv
 ```
 
-### install cuda
+### update conda
+```conda update -n base -c defaults conda```
+
+
+### install python and packages
+conda install python=3.9.2 numpy tqdm pyyaml numba strictyaml -c conda-forge
+
+
+### install cuda (warning: not neccessary if WSL 2.0 is used)
 ```
 wget https://developer.download.nvidia.com/compute/cuda/11.7.0/local_installers/cuda_11.7.0_515.43.04_linux.run
-sudo sh cuda_11.7.0_515.43.04_linux.run --silent --driver
 sudo sh cuda_11.7.0_515.43.04_linux.run
 ```
 
-### install torch and cudatoolkit
+### install torch and cudatoolkit 11.6
 ```
-conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
-```
-
-### install correct spconv
-```
-pip install spconv-cu113 -i https://pypi.python.org/simple
+conda install pytorch torchvision torchaudio cudatoolkit=11.6 -c pytorch -c conda-forge
 ```
 
-### install correct torch-spares and scatter
+### install spconv for cuda 11.6
+Version "cu116" was not available at the time, however cu114 also works.
 ```
-pip install torch-sparse -f https://data.pyg.org/whl/torch-1.11.0%2Bcu113.html
-pip install torch-scatter -f https://data.pyg.org/whl/torch-1.11.0%2Bcu113.html
+pip install spconv-cu114
+```
+
+### install torch-spares and scatter for cuda 11.6
+```
+pip install torch-sparse -f https://data.pyg.org/whl/torch-1.12.0%2Bcu116.html
+pip install torch-scatter -f https://data.pyg.org/whl/torch-1.12.0%2Bcu116.html
 ```
 
 ### install nuscenes devkit
