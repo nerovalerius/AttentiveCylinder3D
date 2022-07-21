@@ -5,7 +5,7 @@
 
 ### pull repo
 ```
-git clone https://github.com/xinge008/Cylinder3D.git
+git clone https://github.com/nerovalerius/AttentiveCylinder3D.git
 ```
 
 ### install anaconda
