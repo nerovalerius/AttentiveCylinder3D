@@ -1,0 +1,4 @@
+# exclude the neural net model files
+models/load/*
+models/save/*
+save_folder/*
