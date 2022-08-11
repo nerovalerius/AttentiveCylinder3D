@@ -12,6 +12,7 @@ git clone https://github.com/nerovalerius/AttentiveCylinder3D.git
 ```
 wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Linux-x86_64.sh
 sh ./Miniconda3-py39_4.12.0-Linux-x86_64.sh
+rm -rf Miniconda3-py39_4.12.0-Linux-x86_64.sh
 ```
 
 ### activate conda
@@ -131,10 +132,12 @@ If you want to validate with your own datasets, you need to provide labels.
 ```
 python demo_folder.py --demo-folder YOUR_FOLDER --save-folder YOUR_SAVE_FOLDER --demo-label-folder YOUR_LABEL_FOLDER
 ```
-# example usage
+# example usages
 
 ```
 python demo_folder.py --demo-folder ../dataset/sequences/00/velodyne/ --demo-label-folder ../dataset/sequences/00/labels/ --save-folder save_folder/ 
+python demo_folder.py --demo-folder /home/nero/master/dataset/sequences/00/velodyne/ --save-folder save_folder/
+python demo_folder.py --demo-folder /home/nero/semanticKITTI/dataset/sequences/00/velodyne/ --save-folder save_folder/ --demo-label-folder home/nero/semanticKITTI/dataset/sequences/00/labels/
 ```
 
 ## Rights

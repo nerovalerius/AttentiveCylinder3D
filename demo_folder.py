@@ -79,10 +79,16 @@ def main(args):
     SemKITTI_label_name = get_SemKITTI_label_name(dataset_config["label_mapping"])
     unique_label = np.asarray(sorted(list(SemKITTI_label_name.keys())))[1:] - 1
     unique_label_str = [SemKITTI_label_name[x] for x in unique_label + 1]
-
     my_model = model_builder.build(model_config)
     if os.path.exists(model_load_path):
-        my_model = load_checkpoint(model_load_path, my_model)
+        #my_model = load_checkpoint(model_load_path, my_model)
+        # the original pretrained weights are not loaded properly
+        # i had to change the load function and only a model can be loaded which was trained with this net
+        my_model.load_state_dict(torch.load(model_load_path))
+    else:
+        print("------------------------------------!")
+        print("Model Checkpoint NOT loaded!")
+        print("------------------------------------!")
 
     my_model.to(pytorch_device)
     optimizer = optim.Adam(my_model.parameters(), lr=train_hypers["learning_rate"])
@@ -149,3 +155,4 @@ if __name__ == '__main__':
     print(' '.join(sys.argv))
     print(args)
     main(args)
+ 
