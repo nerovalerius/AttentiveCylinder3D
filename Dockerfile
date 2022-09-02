@@ -1,57 +1,66 @@
-FROM nvidia/cuda:10.2-cudnn8-devel-ubuntu18.04
+# Build upon nvidia docker file
+FROM nvidia/cuda:11.7.1-cudnn8-devel-ubuntu22.04
 
 # Just in case we need it
 ENV DEBIAN_FRONTEND noninteractive
 
+# Install Miniconda for virtual environments
+RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+    && rm Miniconda3-latest-Linux-x86_64.sh
+
+# Make conda commands executable in shell:
+RUN conda init bash
+
+# Create virtual environment in conda
+RUN conda create -n attentive_cylinder_3d python=3.9
+
+# automatically activate environment (only necessary when entering container with bash)
+RUN echo "conda activate attentive_cylinder_3d" >> ~/.bashrc
+
+# Make RUN commands use the new environment:
+SHELL ["conda", "run", "-n", "vista", "/bin/bash", "-c"]
+
+# Install apt dependencies
 RUN apt update && apt upgrade -y
-RUN apt install -y python3 python3-dev python3-pip
+RUN apt install -y git wget unzip libboost-all-dev cmake build-essential fmpeg libsm6 libxext6
+
+# Install conda dependencies
+RUN conda install pytorch torchvision torchaudio cudatoolkit=11.6 -c pytorch -c conda-forge
+RUN conda install python=3.9.2 numpy tqdm pyyaml numba strictyaml -c conda-forge
+
+# Install pip dependencies
 RUN pip3 install --upgrade pip
-RUN apt install -y git wget unzip
-RUN apt install -y build-essential
-RUN apt install -y ffmpeg libsm6 libxext6
-
-# get newer version of cmake
-RUN wget https://apt.kitware.com/kitware-archive.sh
-RUN chmod +x kitware-archive.sh && ./kitware-archive.sh
-
-RUN pip3 install torch==1.6.0
-RUN pip3 install pyyaml==5.4.1
 RUN pip3 install cython==0.29.24
 RUN pip3 install nuscenes-devkit==1.1.6
-RUN pip3 install numba==0.53.1
-RUN pip3 install strictyaml==1.4.4
+RUN pip3 install spconv-cu114
+RUN pip3 install torch-sparse -f https://data.pyg.org/whl/torch-1.12.0%2Bcu116.html
+RUN pip3 install torch-scatter -f https://data.pyg.org/whl/torch-1.12.0%2Bcu116.html
 
-# Torch scatter
-RUN pip3 install --no-index torch-scatter -f https://pytorch-geometric.com/whl/torch-1.6.0+cu102.html
+# Git config
+RUN git config --global user.email "attentive_cylinder_3d_docker@test.net"
+RUN git config --global user.name "attentive_cylinder_3d_docker"
 
-# SpConv
-# need to use SpConv 1 and hotfixes
-# see: https://github.com/traveller59/spconv/issues/58
-RUN git clone --recursive https://github.com/traveller59/spconv.git /spconv
-RUN wget -O hotfixes.zip https://github.com/traveller59/spconv/files/4658204/hotfixes.zip
-RUN unzip hotfixes -d /hotfixes
-WORKDIR /spconv
-RUN git checkout 8da6f967fb9a054d8870c3515b1b44eca2103634 
-# needs to be done before we can apply the patches
-RUN git config --global user.email "test@test.com"
-RUN git config --global user.name "Test"
-RUN git am /hotfixes/0001-fix-problem-with-torch-1.4.patch 
-RUN git am /hotfixes/0001-Allow-to-specifiy-CUDA_ROOT-directory-and-pick-corre.patch
-RUN apt install -y libboost-all-dev cmake
+# Environment variable for cuda
 ENV CUDA_ROOT=/usr/local/cuda
-RUN pip3 install wheel
-WORKDIR /spconv/third_party
-RUN git clone https://github.com/pybind/pybind11.git
-WORKDIR /spconv
-RUN python3 setup.py bdist_wheel
-WORKDIR /spconv/dist
-RUN pip3 install *.whl
 
-## Install Cylinder 3D
-WORKDIR /
-RUN git clone --recursive --depth 1 https://github.com/xinge008/Cylinder3D
-WORKDIR /Cylinder3D
+## Install Attentive Cylinder 3D
+RUN git clone --recursive --depth 1 https://github.com/nerovalerius/AttentiveCylinder3D.git
+WORKDIR /workspace/
+
+# Make net executable
 RUN chmod +x train_nusc.sh
-RUN mkdir -p /data/dataset/nuScenes
+RUN chmod +x train.sh
 
+# create folders - they must be created since they are inside .gitignore and not wanted in the online repo
+RUN mkdir -p /models/load/
+RUN mkdir -p /models/save/
+RUN mkdir -p /save_folder/
+RUN mkdir -p /dataset/semanticKITTI
+RUN mkdir -p /dataset/nuScenes
+
+# Instead of using conda activate, there’s another way to run a command inside an environment. 
+# conda run -n myenv yourcommand will run yourcommand inside the environment. 
+# You’ll also want to pass the --no-capture-output flag to conda run so it streams stdout and stderr.
+# ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "attentive_cylinder_3d", "python", "-u", "train_cylinder_asym.py"]
 

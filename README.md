@@ -1,7 +1,8 @@
 
-# Cylindrical 3D Transformer Network for 3D LiDAR Segmentation
+# Attentive Cylindrical 3D Transformer Network for 3D LiDAR Segmentation
+This network builds upon [Cylinder3D](https://github.com/xinge008/Cylinder3D) from Zhu et.al.
 
-## Installation
+## I - Installation and usage w/o docker
 
 ### pull repo
 ```
@@ -10,9 +11,9 @@ git clone https://github.com/nerovalerius/AttentiveCylinder3D.git
 
 ### install anaconda
 ```
-wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Linux-x86_64.sh
-sh ./Miniconda3-py39_4.12.0-Linux-x86_64.sh
-rm -rf Miniconda3-py39_4.12.0-Linux-x86_64.sh
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh -b
+rm Miniconda3-latest-Linux-x86_64.sh
 ```
 
 ### activate conda
@@ -24,10 +25,6 @@ Either restart terminal or do:
 conda create -n attentive_cylinder_3d
 conda activate attentive_cylinder_3d
 ```
-
-### update conda
-```conda update -n base -c defaults conda```
-
 
 ### install python and packages
 conda install python=3.9.2 numpy tqdm pyyaml numba strictyaml -c conda-forge
@@ -59,6 +56,8 @@ pip install torch-scatter -f https://data.pyg.org/whl/torch-1.12.0%2Bcu116.html
 ### install nuscenes devkit
 - [nuScenes-devkit](https://github.com/nutonomy/nuscenes-devkit) (optional for nuScenes)
 
+## II - Usage with docker
+docker run --rm -it --gpus '"device=0"' --cpuset-cpus="0-7" -m 22g -v /dataset/semanticKITTI/:/workspace/dataset/semanticKITTI container.salzburgresearch.at/mobility/projects/mdi-lab/attentivecylinder3d --optional --arguments --for --python --script
 
 ## Data Preparation
 
@@ -105,7 +104,6 @@ pip install torch-scatter -f https://data.pyg.org/whl/torch-1.12.0%2Bcu116.html
 ```
 sh train.sh
 ```
-
 
 ## Training
 
