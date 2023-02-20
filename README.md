@@ -9,23 +9,6 @@ This network builds upon [Cylinder3D](https://github.com/xinge008/Cylinder3D) fr
 git clone https://github.com/nerovalerius/AttentiveCylinder3D.git
 ```
 
-### install anaconda
-```
-wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b
-rm Miniconda3-latest-Linux-x86_64.sh
-```
-
-### activate conda
-Either restart terminal or do:
-```source ~/.bashrc```
-
-### create conda environment
-```
-conda create -n attentive_cylinder_3d
-conda activate attentive_cylinder_3d
-```
-
 ### install python and packages
 conda install python=3.9.2 numpy tqdm pyyaml numba strictyaml -c conda-forge
 
@@ -62,6 +45,11 @@ pip install torch-scatter -f https://data.pyg.org/whl/torch-1.12.0%2Bcu116.html
 I strongly recommend that you use docker. This docker mounts a workspace where this git repo should be cloned in.
 In comparison to the package versions described in this readme, the docker uses some newer versions.
 Adapt your workspace inside ```build_docker.sh ``` and then run ```sh build_docker.sh ```.
+
+### run docker
+Simply run ```./start_docker.sh``` to get the docker up and running. Afterwards, inside the docker, install the Minkowski Engine with ```./install_minkowsk.sh```.
+Then you could either start jupyter notebooks with ```./start_jupyter.sh```, or convert the notebook to a python file for training without jupyter:
+````jupyter nbconvert train_attentivecylinder3d.ipynb --to python```. 
 
 ## Data Preparation
 
@@ -111,13 +99,13 @@ There is also a script to start a jupyter lab instance on port 12212. Just run `
 The main file to work with is ```train_cylinder_asym_jupyter.ipynb```.
 
 # Train network (either inside the interactive docker or without docker)
-```sh train.sh```
+```python train_attentivecylinder3d.py```
 
 ## Configuration for different datasets
 
 ### Training semanticKITTI
 1. modify ```config/semantickitti.yaml``` with your custom settings. We provide a sample yaml for SemanticKITTI
-2. train the network by running ```sh train.sh```
+2. train the network by running ```python train_attentivecylinder3d.py```
 
 ### Training nuScenes
 Please refer to [NUSCENES-GUIDE](./NUSCENES-GUIDE.md)
