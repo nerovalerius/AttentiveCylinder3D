@@ -56,8 +56,12 @@ pip install torch-scatter -f https://data.pyg.org/whl/torch-1.12.0%2Bcu116.html
 ### install nuscenes devkit
 - [nuScenes-devkit](https://github.com/nutonomy/nuscenes-devkit) (optional for nuScenes)
 
-## II - Usage with docker
-docker run --rm -it --gpus '"device=0"' --cpuset-cpus="0-7" -m 22g -v /dataset/semanticKITTI/:/workspace/dataset/semanticKITTI container.salzburgresearch.at/mobility/projects/mdi-lab/attentivecylinder3d --optional --arguments --for --python --script
+## II - Installation docker
+
+### build docker
+I strongly recommend that you use docker. This docker mounts a workspace where this git repo should be cloned in.
+In comparison to the package versions described in this readme, the docker uses some newer versions.
+Adapt your workspace inside ```build_docker.sh ``` and then run ```sh build_docker.sh ```.
 
 ## Data Preparation
 
@@ -97,15 +101,19 @@ docker run --rm -it --gpus '"device=0"' --cpuset-cpus="0-7" -m 22g -v /dataset/s
 
 ```
 
-## Usage
+# Usage
 
+## (Optional) - start docker interactively first
+Use ```sh run_docker``` to start an interactive docker container.
 
-# train network
-```
-sh train.sh
-```
+## (Optional) - start jupyter notebook
+There is also a script to start a jupyter lab instance on port 12212. Just run ```sh start_jupyter.sh``` inside your -it docker workspace/attentivecylinder3d/ and open your (remote browser). 
+The main file to work with is ```train_cylinder_asym_jupyter.ipynb```.
 
-## Training
+# Train network (either inside the interactive docker or without docker)
+```sh train.sh```
+
+## Configuration for different datasets
 
 ### Training semanticKITTI
 1. modify ```config/semantickitti.yaml``` with your custom settings. We provide a sample yaml for SemanticKITTI
@@ -130,7 +138,7 @@ If you want to validate with your own datasets, you need to provide labels.
 ```
 python demo_folder.py --demo-folder YOUR_FOLDER --save-folder YOUR_SAVE_FOLDER --demo-label-folder YOUR_LABEL_FOLDER
 ```
-# example usages
+# Inference - example usages
 
 ```
 python demo_folder.py --demo-folder ../dataset/sequences/00/velodyne/ --demo-label-folder ../dataset/sequences/00/labels/ --save-folder save_folder/ 
@@ -138,8 +146,15 @@ python demo_folder.py --demo-folder /home/nero/master/dataset/sequences/00/velod
 python demo_folder.py --demo-folder /home/nero/semanticKITTI/dataset/sequences/00/velodyne/ --save-folder save_folder/ --demo-label-folder home/nero/semanticKITTI/dataset/sequences/00/labels/
 ```
 
+# Get statistics out of the dataset
+```git clone https://github.com/PRBonn/semantic-kitti-api.git```
+
+Run ./content.py --directory dataset/ to achieve statistics about the labels inside the dataset.
+Adapt the semantic-kitti-api/config/semantic-kitti.yaml file beforehand or use the sbld.yaml file inside this repo under: attentivecylinder3d/config/label_mapping/sbld.yaml. The train/test split folders must match the folder structure of train/test if you have one.
+
+
 ## Rights
-This network builds upon [Cylinder3D](https://github.com/xinge008/Cylinder3D) from Zhu et.al.
+This network mainly builds upon [Cylinder3D](https://github.com/xinge008/Cylinder3D) from Zhu et.al.
 
 If you find our their useful in your research, please consider citing their [paper](https://arxiv.org/pdf/2011.10033):
 ```
@@ -150,3 +165,15 @@ If you find our their useful in your research, please consider citing their [pap
   year={2020}
 }
 ```
+
+Furthermore, the transformer blocks from [CodedVTR](https://github.com/A-suozhang/CodedVTR) are used in this work, which is based on [SpatioTemporalSegmentation-ScanNet](https://github.com/chrischoy/SpatioTemporalSegmentation-ScanNet).
+
+@inproceedings{zhao2022codedvtr,
+  title={CodedVTR: Codebook-based Sparse Voxel Transformer with Geometric Guidance},
+  author={Zhao, Tianchen and Zhang, Niansong and Ning, Xuefei and Wang, He and Yi, Li and Wang, Yu},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={1435--1444},
+  year={2022}
+}
+
+

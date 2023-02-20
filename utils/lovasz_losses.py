@@ -198,7 +198,7 @@ def lovasz_softmax_flat(probas, labels, classes='present'):
         errors_sorted, perm = torch.sort(errors, 0, descending=True)
         perm = perm.data
         fg_sorted = fg[perm]
-        losses.append(torch.dot(errors_sorted, Variable(lovasz_grad(fg_sorted))))
+        losses.append(torch.dot(errors_sorted, Variable(lovasz_grad(fg_sorted)))) # Richtig gewichtet nach Klassen?
     return mean(losses)
 
 

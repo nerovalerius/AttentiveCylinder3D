@@ -141,12 +141,12 @@ def main(args):
         print('Current val miou is %.3f' %
               (val_miou))
         print('Current val loss is %.3f' %
-              (np.mean(demo_loss_list)))
+              (np.mean(demo_loss_list))) 
 
 if __name__ == '__main__':
     # Training settings
     parser = argparse.ArgumentParser(description='')
-    parser.add_argument('-y', '--config_path', default='config/semantickitti.yaml')
+    parser.add_argument('-y', '--config_path', default='config/sbld.yaml')
     parser.add_argument('--demo-folder', type=str, default='', help='path to the folder containing demo lidar scans', required=True)
     parser.add_argument('--save-folder', type=str, default='', help='path to save your result', required=True)
     parser.add_argument('--demo-label-folder', type=str, default='', help='path to the folder containing demo labels')

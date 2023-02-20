@@ -1,0 +1,4 @@
+attncyl3dv1 -> only attentionblock between up 2 + 3 like SVASeg
+attncyl3dv3 -> attentionblocks over the complete ENCODER DECODER STRUCTURE with temp annealing (temp_0 = 2.0, temp**(1-temp_0)
+attncyl3dv4 -> attentionblocks over the complete ENCODER DECODER STRUCTURE with temp annealing from 30 linearly to 1 (3 * epoch per step) until it reaches 1 in epoch 10
+attncyl3dv5 -> like v3 but with geo_shape=True and sparse_pattern_reg = True

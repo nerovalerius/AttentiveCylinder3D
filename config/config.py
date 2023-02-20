@@ -58,6 +58,8 @@ train_params = Map(
     {
         "model_load_path": Str(),
         "model_save_path": Str(),
+        "model_save_path_early_stop": Str(),
+        "model_save_path_best_val_miou": Str(),
         "checkpoint_every_n_steps": Int(),
         "max_num_epochs": Int(),
         "eval_every_n_steps": Int(),
