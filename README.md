@@ -1,6 +1,8 @@
 
 # Attentive Cylindrical 3D Transformer Network for 3D LiDAR Segmentation
 This network builds upon [Cylinder3D](https://github.com/xinge008/Cylinder3D) from Zhu et.al.
+It utilizes self-attention blocks from [CodedVTR](https://github.com/A-suozhang/CodedVTR), and implements a softmax temperature annealing which declines with advancing epochs. Multi-Head Attention is adjusted to the convolution channels of the underlying, 3D-Unet similar, structure of the network.
+
 
 ## I - Installation and usage w/o docker
 
